@@ -50,6 +50,7 @@ app.post('/controllerCallHome', function(req, res) {
   //initial setup of new person, inits a new Poll
 	if(data.name && data.imageUrl) {
 		currentPoll = new Poll(data.name, data.imageUrl);
+		clearVotes();
 		console.log('new poll: ' + data.name);
 	}
 
