@@ -1,0 +1,21 @@
+img {
+	width: 400px; height: 400px;
+}
+
+button {
+	width: 200px;
+}
+
+.button-box {
+	margin: 20px;
+}
+
+h1, .bold {
+	font-weight: bold;
+}
+
+#chat-content {
+	height: 200px;
+	overflow: auto;
+
+}
