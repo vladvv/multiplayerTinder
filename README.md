@@ -13,9 +13,7 @@ This project creates a poll allowing users to vote "yes" or "no" on a potential 
 
 
 ## Screenshot
-
-![clientview](https://user-images.githubusercontent.com/5777324/32527681-423471d6-c3fd-11e7-99f0-f3739d4b375d.JPG)
-
+![clientview](https://user-images.githubusercontent.com/5777324/32527927-55785dce-c3fe-11e7-81fa-a89ec4e41ce1.JPG)
 
 ## disclaimer
 this is not secure or good, do not use for any reason pls
