@@ -45,13 +45,12 @@ class Message {
 
 
 app.post('/controllerCallHome', function(req, res) {
-  console.log(req.body);
   var data = req.body;
 
   //initial setup of new person, inits a new Poll
 	if(data.name && data.imageUrl) {
 		currentPoll = new Poll(data.name, data.imageUrl);
-		console.log('received update on: ' + data.name);
+		console.log('new poll: ' + data.name);
 	}
 
 	if(currentPoll && data.desc) {
@@ -60,7 +59,6 @@ app.post('/controllerCallHome', function(req, res) {
 
 	if(currentPoll) {
 		res.send(currentPoll.decision);
-		console.log('sending response');
 	} else {
 		res.end();
 	}
@@ -83,7 +81,6 @@ io.on('connection', function(socket){
   });
 
   socket.on('castVote', function(vote) {
-  	console.log(vote);
   	users[socket.id].vote = vote;
 		io.emit('updateUsers', users);
 

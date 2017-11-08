@@ -7,7 +7,7 @@ var PollDisplay = {
 			m('div.panel-body text-center', [ 
 				m('img', {src: poll ? poll.imageUrl : 'http://i.imgur.com/Kzk9I8o.png'})
 			]),
-			m('h4 text-center', poll ? poll.desc : ''),
+			m('h4.text-center', poll ? poll.desc : ''),
 			m('div.panel-footer text-center', [
 				m('button.btn-success btn-lg', {id: 'yes', onclick: args.controller.vote}, ['YES ', m('span.glyphicon glyphicon-thumbs-up')]),
 				m('button.btn-danger btn-lg', {id: 'no', onclick: args.controller.vote}, ['NO ', m('span.glyphicon glyphicon-thumbs-down')])
