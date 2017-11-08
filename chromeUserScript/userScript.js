@@ -9,10 +9,11 @@
 // @grant        GM_xmlhttpRequest
 // @connect      localhost
 // @connect      self
+// @connect      herokuapp.com
 // @require http://code.jquery.com/jquery-1.12.4.min.js
 // ==/UserScript==
 
-//var serverUrl = 'heroku-url-or-whatever';
+//var serverUrl = 'you heroku?';
 var serverUrl = 'http://localhost:3000';
 var pollRate = 1000;
 
@@ -31,6 +32,8 @@ var pollRate = 1000;
         var image = $('.recCard.active .recCard__img')[0];
 
         var bio = $('.profileCard__bio ')[0];
+        bio = bio ? bio : $('.profileCard__info ')[0];
+
         var desc = bio ? bio.children[0].textContent : '';
 
         var data = {
@@ -39,7 +42,8 @@ var pollRate = 1000;
             desc: desc
         };
 
-        console.log('sending: ' + data);
+        console.log('sending: ');
+        console.log(data);
         GM_xmlhttpRequest({
             method: "POST",
             data: JSON.stringify(data),
