@@ -34,7 +34,7 @@ var pollRate = 1000;
         var bio = $('.profileCard__bio ')[0];
         bio = bio ? bio : $('.profileCard__info ')[0];
 
-        var desc = bio ? bio.children[0].textContent : '';
+        var desc = (bio && bio.children[0]) ? bio.children[0].textContent : '';
 
         var data = {
             name: $('.recCard.active .recCard__name').text(),
