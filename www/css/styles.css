@@ -19,3 +19,7 @@ h1, .bold {
 	overflow: auto;
 
 }
+
+.panel-heading h1 {
+	padding-top: 8px;
+}

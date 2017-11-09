@@ -32,6 +32,7 @@ class User {
     this.id = id;
     this.name = '';
     this.vote = '';
+    this.active = false;
   }
 }
 
@@ -82,17 +83,20 @@ io.on('connection', function(socket){
   });
 
   socket.on('castVote', function(vote) {
+  	if(!users[socket.id].active) return;
+
   	users[socket.id].vote = vote;
 		io.emit('updateUsers', users);
 
 		var votes = {yes: 0, no: 0};
-		var userCount = _.size(users);
-		_.map(users, function(user) {
+		var activeUsers = _.filter(users, function(u) {return u.active});
+
+		_.map(activeUsers, function(user) {
 			votes[user.vote]++;
 		});
 
 		var voteCount = votes['yes'] + votes['no'] 
-		if(voteCount > MIN_VOTES && voteCount >= userCount) {
+		if(voteCount > MIN_VOTES && voteCount >= activeUsers.length && (votes['no'] != votes['yes'])) {
 			//A decision has been made!
 			if(votes['yes'] > votes['no']) {
 				currentPoll.decision = 'like';
@@ -100,18 +104,28 @@ io.on('connection', function(socket){
 				currentPoll.decision = 'dislike';
 			}
 			postDecisionChat();
-			clearVotes();
 	}
   });
 
   socket.on('sendMessage', function(message) {
     chatState.push(new Message( users[socket.id].name ? users[socket.id].name : users[socket.id].id, message ));
-
+    console.log(message);
     if(chatState.length > MAX_CHAT_LENGTH) {
     	chatState = _.takeRight(chatState, MAX_CHAT_LENGTH);
     }
-
     io.emit('updateChat', chatState);
+  });
+
+  socket.on('changeState', function(state) {
+  	var currentUser = users[socket.id];
+
+		currentUser.active = (state === 'active');
+
+  	if(!currentUser.active) {
+  		currentUser.vote = '';
+  	}
+
+		io.emit('updateUsers', users);
   });
 });
 

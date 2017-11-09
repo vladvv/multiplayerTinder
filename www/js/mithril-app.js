@@ -18,20 +18,34 @@ var PollDisplay = {
 
 var UserDisplay = {
 	view: function(ctrl, args) {
-		var optional = _.size(args.users()) <= 2 ? ' (Need at least 3)' : '';
+		var optional = _.size(args.controller.users()) <= 2 ? ' (Need at least 3)' : '';
+
+		var activeUsers = _.filter( args.controller.users(), function(user) {return user.active} );
+		var inactiveUsers = _.filter( args.controller.users(), function(user) {return !user.active} );
 
 		return m('div.panel panel-default', [
-				m('div.panel-heading', m('h1.panel-title text-center', 'Users' + optional)),
+				m('div.panel-heading', [
+					m('h1.panel-title pull-left', 'Active Users' + optional),
+					m('button.btn btn-default pull-right', {id: 'active', onclick: args.controller.changeState}, 'go active'),
+					m('div.clearfix')
+				]),
 				m('div.panel-body', [
-					m('ul.list-group', getUsers(args.users()))
+					m('ul.list-group', getUserItems(activeUsers))
+				]),
+				m('div.panel-heading', [
+					m('h1.panel-title pull-left', 'Spectators'),
+					m('button.btn btn-default pull-right', {id: 'inactive', onclick: args.controller.changeState}, 'spectate'),
+					m('div.clearfix')
+				]),
+				m('div.panel-body', [
+					m('ul.list-group', getUserItems(inactiveUsers))
 				])
 			]);
 
-		function getUsers(users) {
+		function getUserItems(users) {
 			return _.map(users, function(user) {
 				var voteClass = (user.vote == 'yes') ? 'list-group-item-success' : '';
 				voteClass = (user.vote == 'no') ? 'list-group-item-danger' : voteClass;
-
 				return m('li.list-group-item', {class: [voteClass]},user.name ? user.name : user.id);
 			});
 		}
@@ -105,6 +119,10 @@ var MainPage = {
 			ctrl.typedMessage('');
 		}
 
+		ctrl.changeState = function(evt) {
+			socket.emit('changeState', evt.target.id);
+		}
+
 		ctrl.vote = function(button) {
 			socket.emit('castVote', button.currentTarget.id);
 		}
@@ -132,7 +150,7 @@ var MainPage = {
 		return m('div.container', [
 			m('div.row', [ 
 				m('div.col-md-8', m.component(PollDisplay, {controller: ctrl, poll: ctrl.currentPoll})),
-				m('div.col-md-4', m.component(UserDisplay, {users: ctrl.users}))
+				m('div.col-md-4', m.component(UserDisplay, {controller: ctrl}))
 			]),
 			m('div.row', [ 
 				m('div.col-md-12', m.component(ChatDisplay, {controller: ctrl} ))
