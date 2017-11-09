@@ -18,10 +18,9 @@ var PollDisplay = {
 
 var UserDisplay = {
 	view: function(ctrl, args) {
-		var optional = _.size(args.controller.users()) <= 2 ? ' (Need at least 3)' : '';
-
 		var activeUsers = _.filter( args.controller.users(), function(user) {return user.active} );
 		var inactiveUsers = _.filter( args.controller.users(), function(user) {return !user.active} );
+		var optional = (activeUsers.length <= 2) ? ' (Need at least 3)' : '';
 
 		return m('div.panel panel-default', [
 				m('div.panel-heading', [
